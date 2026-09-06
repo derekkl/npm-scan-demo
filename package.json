@@ -1,0 +1,15 @@
+{
+  "name": "npm-scan-demo",
+  "version": "1.0.0",
+  "description": "Teaching example: dependency and code scanning for Node/npm projects",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "audit": "npm audit"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "lodash": "4.17.4",
+    "minimist": "0.0.8"
+  }
+}
