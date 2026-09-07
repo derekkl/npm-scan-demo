@@ -65,6 +65,14 @@ The `npm-audit` job is intentionally configured with `--audit-level=high`, meani
 
 ---
 
+## A live example, found while building this
+
+While standing this pipeline up, the `Trivy` jobs failed on the first push because they were pinned to `aquasecurity/trivy-action@0.24.0` — a tag that no longer resolves. In March 2026, a threat actor used compromised maintainer credentials to force-push malicious commits into most of `trivy-action`'s old-style version tags (see [GHSA-69fq-xp46-6x23](https://github.com/aquasecurity/trivy/security/advisories/GHSA-69fq-xp46-6x23)). Aqua Security's response was to re-tag everything with a `v` prefix (e.g. `v0.36.0`) and invalidate the old un-prefixed tags.
+
+Worth sitting with: this pipeline exists to catch supply-chain risk in *npm* dependencies, and it tripped over supply-chain risk in its own CI tooling first. Pinning a GitHub Action to a version tag isn't meaningfully safer than pinning an npm package to a version range — both are trusting a maintainer's account security. The more robust practice (not done here, to keep the demo simple) is pinning Actions to a full commit SHA rather than a mutable-looking tag.
+
+---
+
 ## Mapping this to an enterprise setup (ADO + StackRox/ACS)
 
 This demo uses GitHub-native, free tooling because it's a public personal repo. The same layers map directly onto a typical enterprise pipeline:
