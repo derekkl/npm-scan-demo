@@ -14,6 +14,14 @@ This mirrors the "bad-practice on purpose" teaching pattern: the point isn't tha
 
 Both are actually `require()`'d and used in `src/server.js` (not just declared and ignored), so this isn't a synthetic finding — it's a real, exploitable dependency chain.
 
+### What these packages actually do
+
+If you're not familiar with the npm ecosystem, here's what each flagged package is for:
+
+- **express** — the most widely used web framework for Node.js; it's what this app uses to define routes and handle HTTP requests. It's the foundation most Node backends are built on, which is why its own dependencies (like `qs`, used for parsing query strings) get pulled in transitively — that's how the `qs` vulnerability below showed up even though we never installed `qs` ourselves.
+- **lodash** — a utility library of helper functions for working with arrays and objects (merging objects, deep-cloning, deduplicating lists, etc.). It's one of the single most-downloaded packages on npm, which makes it a good teaching example: a vulnerability here has enormous real-world blast radius. This app uses its `merge` function specifically — the function implicated in the CVEs for the pinned version.
+- **minimist** — a small utility that parses command-line arguments (turns `--foo bar` into `{ foo: "bar" }`). Much lower-profile than the other two, but it's everywhere as a *transitive* dependency — many other tools use it internally to parse their own CLI flags, so a vulnerable version tends to sneak in indirectly even in projects that never touch it directly.
+
 ## Real findings from this repo
 
 This is unedited output from running `npm audit` against this exact `package.json`:
